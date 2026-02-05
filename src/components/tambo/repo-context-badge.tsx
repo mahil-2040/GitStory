@@ -5,10 +5,7 @@ import { useGitHubRepoInfo } from "@/hooks/use-github-mcp";
 import { Github, X } from "lucide-react";
 import * as React from "react";
 
-/**
- * Badge component showing the currently connected GitHub repository.
- * Displays in the message input area when a repo is imported.
- */
+// Shows the connected GitHub repo with a remove button
 export const RepoContextBadge: React.FC<{
     className?: string;
 }> = ({ className }) => {
@@ -23,10 +20,7 @@ export const RepoContextBadge: React.FC<{
     }, [repoInfo.fullName]);
 
     const handleRemove = () => {
-        // Clear the repo from localStorage
         localStorage.removeItem("gitstory-repo");
-
-        // Dispatch event to notify other components
         window.dispatchEvent(
             new CustomEvent("gitstory-repo-changed", {
                 detail: null,

@@ -34,6 +34,7 @@ import {
 } from "@/components/tambo/thread-history";
 import { useMergeRefs } from "@/lib/thread-hooks";
 import type { Suggestion } from "@tambo-ai/react";
+import { useTamboThread } from "@tambo-ai/react";
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 
@@ -56,9 +57,23 @@ export interface MessageThreadFullProps extends React.HTMLAttributes<HTMLDivElem
 export const MessageThreadFull = React.forwardRef<
   HTMLDivElement,
   MessageThreadFullProps
->(({ className, variant, ...props }, ref) => {
+>(({
+  className, variant, ...props }, ref) => {
   const { containerRef, historyPosition } = useThreadContainerContext();
   const mergedRef = useMergeRefs<HTMLDivElement | null>(ref, containerRef);
+  const { startNewThread } = useTamboThread();
+
+  // Listen for repo change events to start a new thread (clears old context)
+  React.useEffect(() => {
+    const handleStartNewThread = () => {
+      startNewThread();
+    };
+
+    window.addEventListener("gitstory-start-new-thread", handleStartNewThread);
+    return () => {
+      window.removeEventListener("gitstory-start-new-thread", handleStartNewThread);
+    };
+  }, [startNewThread]);
 
   const threadHistorySidebar = (
     <ThreadHistory position={historyPosition}>

@@ -1,7 +1,4 @@
-/**
- * GitHub API service for fetching repository information
- * Uses the user's GitHub access token stored in localStorage
- */
+// GitHub API service for fetching repository information
 
 interface GitHubCommit {
     sha: string;
@@ -34,7 +31,6 @@ interface RepoInfoResult {
     error?: string;
 }
 
-// Helper to get the access token from localStorage
 function getAccessToken(): string | null {
     if (typeof window === "undefined") return null;
 
@@ -50,7 +46,6 @@ function getAccessToken(): string | null {
     return null;
 }
 
-// Helper to get the current repo from localStorage
 function getCurrentRepo(): { owner: string; repo: string; branch?: string } | null {
     if (typeof window === "undefined") return null;
 
@@ -72,9 +67,6 @@ function getCurrentRepo(): { owner: string; repo: string; branch?: string } | nu
     return null;
 }
 
-/**
- * Get information about the currently imported GitHub repository
- */
 export async function getRepoInfo(): Promise<RepoInfoResult> {
     const token = getAccessToken();
     const repoConfig = getCurrentRepo();
@@ -125,9 +117,6 @@ export async function getRepoInfo(): Promise<RepoInfoResult> {
     }
 }
 
-/**
- * Get recent commits from the currently imported GitHub repository
- */
 export async function getRecentCommits(input: { count?: number }): Promise<{
     success: boolean;
     data?: RecentCommitsResult;
@@ -146,7 +135,6 @@ export async function getRecentCommits(input: { count?: number }): Promise<{
     }
 
     try {
-        // First get the default branch if not specified
         let branch = repoConfig.branch;
         if (!branch) {
             const repoResponse = await fetch(
@@ -187,7 +175,7 @@ export async function getRecentCommits(input: { count?: number }): Promise<{
             html_url: string;
         }) => ({
             sha: commit.sha.substring(0, 7),
-            message: commit.commit.message.split("\n")[0], // First line only
+            message: commit.commit.message.split("\n")[0],
             author: commit.commit.author.name,
             date: commit.commit.author.date,
             url: commit.html_url,
@@ -206,9 +194,6 @@ export async function getRecentCommits(input: { count?: number }): Promise<{
     }
 }
 
-/**
- * Get the contents of a file from the currently imported GitHub repository
- */
 export async function getFileContent(input: { path: string }): Promise<{
     success: boolean;
     data?: { path: string; content: string; size: number };
@@ -249,7 +234,6 @@ export async function getFileContent(input: { path: string }): Promise<{
             return { success: false, error: `${input.path} is a ${data.type}, not a file` };
         }
 
-        // Decode base64 content
         const content = atob(data.content);
 
         return {
@@ -265,9 +249,6 @@ export async function getFileContent(input: { path: string }): Promise<{
     }
 }
 
-/**
- * List files and directories in a path of the currently imported GitHub repository
- */
 export async function listRepoContents(input: { path?: string }): Promise<{
     success: boolean;
     data?: { path: string; items: Array<{ name: string; type: "file" | "dir"; path: string; size?: number }> };

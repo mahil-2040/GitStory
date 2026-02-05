@@ -24,16 +24,8 @@ import type { TamboComponent } from "@tambo-ai/react";
 import { TamboTool } from "@tambo-ai/react";
 import { z } from "zod";
 
-/**
- * tools
- *
- * This array contains all the Tambo tools that are registered for use within the application.
- * Each tool is defined with its name, description, and expected props. The tools
- * can be controlled by AI to dynamically fetch data based on user interactions.
- */
-
 export const tools: TamboTool[] = [
-  // GitHub Repository Tools
+  // GitHub tools
   {
     name: "getRepoInfo",
     description:

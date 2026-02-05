@@ -1142,22 +1142,7 @@ const MessageInputMcpConfigButton = React.forwardRef<
 });
 MessageInputMcpConfigButton.displayName = "MessageInput.McpConfigButton";
 
-/**
- * Import Code Button component for opening the Import Code modal.
- * Allows users to import a GitHub repository for AI context.
- * @component MessageInput.ImportCodeButton
- * @example
- * ```tsx
- * <MessageInput>
- *   <MessageInput.Textarea />
- *   <MessageInput.Toolbar>
- *     <MessageInput.ImportCodeButton />
- *     <MessageInput.McpConfigButton />
- *     <MessageInput.SubmitButton />
- *   </MessageInput.Toolbar>
- * </MessageInput>
- * ```
- */
+// Import Code button - opens a modal to import GitHub repos
 const MessageInputImportCodeButton = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & {

@@ -4,29 +4,15 @@ import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import * as React from "react";
 
-/**
- * Props for the ImportCodeModal component
- */
 export interface ImportCodeModalProps {
-    /** Whether the modal is open */
     isOpen: boolean;
-    /** Callback when the modal should close */
     onClose: () => void;
 }
 
-/**
- * Parse a GitHub URL to extract owner, repo, and optional branch
- * Supports formats:
- * - https://github.com/owner/repo
- * - https://github.com/owner/repo/tree/branch
- * - github.com/owner/repo
- */
+// Parse GitHub URL to extract owner, repo, and optional branch
 function parseGitHubUrl(url: string): { owner: string; repo: string; branch?: string } | null {
     try {
-        // Remove trailing slashes and clean up
         const cleanUrl = url.trim().replace(/\/+$/, "");
-
-        // Handle URLs without protocol
         const urlWithProtocol = cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`;
 
         const parsed = new URL(urlWithProtocol);
@@ -56,11 +42,6 @@ function parseGitHubUrl(url: string): { owner: string; repo: string; branch?: st
     }
 }
 
-/**
- * Modal dialog for importing a GitHub repository.
- * Allows users to paste a GitHub URL to configure the repository context
- * for the AI assistant.
- */
 export const ImportCodeModal: React.FC<ImportCodeModalProps> = ({
     isOpen,
     onClose,
@@ -123,6 +104,11 @@ export const ImportCodeModal: React.FC<ImportCodeModalProps> = ({
                 new CustomEvent("gitstory-repo-changed", {
                     detail: { owner: parsed.owner, repo: parsed.repo },
                 })
+            );
+
+            // Dispatch event to start a new thread (clears old conversation context)
+            window.dispatchEvent(
+                new CustomEvent("gitstory-start-new-thread")
             );
 
             onClose();
