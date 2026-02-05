@@ -18,6 +18,7 @@ import {
   MessageSuggestionsStatus,
 } from "@/components/tambo/message-suggestions";
 import { ScrollableMessageContainer } from "@/components/tambo/scrollable-message-container";
+import { RepoContextBadge } from "@/components/tambo/repo-context-badge";
 import { MessageInputMcpConfigButton } from "@/components/tambo/message-input";
 import { ThreadContainer, useThreadContainerContext } from "./thread-container";
 import {
@@ -113,6 +114,10 @@ export const MessageThreadFull = React.forwardRef<
 
         {/* Message input */}
         <div className="px-4 pb-4">
+          {/* Show connected repo badge */}
+          <div className="mb-2">
+            <RepoContextBadge />
+          </div>
           <MessageInput>
             <MessageInputTextarea placeholder="Type your message or paste images..." />
             <MessageInputToolbar>
