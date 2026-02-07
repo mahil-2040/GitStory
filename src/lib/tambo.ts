@@ -22,7 +22,33 @@ export const components: TamboComponent[] = [
   },
   {
     name: "DiffViewer",
-    description: "Displays a side-by-side or unified diff view of code changes with syntax highlighting and annotations. Use this component when showing file changes, code differences, commit diffs, or comparing code versions.",
+    description: `Displays a diff view showing what changed IN a specific commit.
+
+CRITICAL: Show what changed IN the commit, NOT compared to main branch!
+- beforeCode = file content BEFORE the commit (at parent commit)
+- afterCode = file content AFTER the commit (at the commit itself)
+
+HOW TO GET FILE CONTENT:
+1. For a specific commit (e.g., "abc1234"):
+   - beforeCode: Get file at ref "abc1234^" or "abc1234~1" (PARENT commit)
+   - afterCode: Get file at ref "abc1234" (THE commit itself)
+
+2. For file changes in a PR:
+   - beforeCode: Get file at the PR's base branch (e.g., "main" or "develop")
+   - afterCode: Get file at the PR's head branch
+
+3. Edge cases:
+   - File was ADDED in commit: beforeCode = "" (empty string)
+   - File was DELETED in commit: afterCode = "" (empty string)
+   - File doesn't exist at ref: use empty string
+
+ERROR HANDLING:
+- If a tool call fails, DO NOT retry the same call repeatedly
+- If file doesn't exist at a ref, use empty string
+- Report errors to user instead of looping
+
+WRONG: Comparing to latest main (shows all changes since forever)
+RIGHT: Comparing to parent commit (shows what THIS commit changed)`,
     component: DiffViewer,
     propsSchema: diffViewerSchema,
   },
